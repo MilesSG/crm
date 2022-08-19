@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 public interface UserMapper extends BaseMapper<User, Integer> {
 
-    // 通过用户名来查询用户记录，返回用户对象
+    // 通过 用户名来查询用户记录，返回用户对象
     public User queryUserByName(String userName);
 
 }

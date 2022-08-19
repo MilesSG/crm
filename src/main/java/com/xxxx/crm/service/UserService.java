@@ -1,0 +1,58 @@
+package com.xxxx.crm.service;
+
+import com.xxxx.crm.base.BaseService;
+import com.xxxx.crm.dao.UserMapper;
+import com.xxxx.crm.model.UserModel;
+import com.xxxx.crm.utils.AssertUtil;
+import com.xxxx.crm.utils.Md5Util;
+import com.xxxx.crm.vo.User;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service
+public class UserService extends BaseService<User, Integer> {
+
+    @Resource
+    private UserMapper userMapper;
+
+    /**
+     * 1. 参数判断，判断用户姓名、密码非空等，如果参数为空，则抛出异常给Controller层做相应的处理
+     * 2. 调用Dao数据访问层，通过用户名查询用户记录，返回用户对象
+     * 3. 判断用户对象是否为空，如果对象为空，则也抛出异常给Controller层做相应的处理
+     * 4. 如果存在用户记录，则判断前端传来的密码是否和数据库中的密码是否相等，如果密码不正确，则也抛出异常给Controller层做相应的处理
+     * 5. 如果前面的所有操作都正确，则登录成功
+     *
+     * @param userName
+     * @param userPwd
+     */
+    public UserModel userLogin(String userName, String userPwd) {
+        checkLoginParams(userName, userPwd);
+        User user = userMapper.queryUserByName(userName);
+        AssertUtil.isTrue(user == null, "用户姓名不存在!");
+        checkUserPwd(userPwd, user.getUserPwd());
+        return buildUserInfo(user);
+    }
+
+    // 校验用户名和密码，如果为空，最后抛给Controller处理
+    private void checkLoginParams(String userName, String userPwd) {
+        AssertUtil.isTrue(StringUtils.isBlank(userName), "用户姓名不能为空!");
+        AssertUtil.isTrue(StringUtils.isBlank(userPwd), "用户密码不能为空!");
+    }
+
+    // 校验用户传来的密码(userPwd)和数据库的密码(pwd)是否一致
+    private void checkUserPwd(String userPwd, String pwd) {
+        userPwd = Md5Util.encode(userPwd);
+        AssertUtil.isTrue(!userPwd.equals(pwd), "用户密码不正确!");
+    }
+
+    // 为了减少传输量，将用户信息封装成UserModel对象传给前台
+    private UserModel buildUserInfo(User user) {
+        UserModel userModel = new UserModel();
+        userModel.setUserId(user.getId());
+        userModel.setUserName(user.getUserName());
+        userModel.setTrueName(user.getTrueName());
+        return userModel;
+    }
+}

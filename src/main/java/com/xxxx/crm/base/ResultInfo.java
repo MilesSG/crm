@@ -1,6 +1,7 @@
 package com.xxxx.crm.base;
 
 public class ResultInfo {
+
     private Integer code=200;
     private String msg="success";
 

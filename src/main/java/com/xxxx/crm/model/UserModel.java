@@ -1,5 +1,6 @@
 package com.xxxx.crm.model;
 
+// 用户model对象
 public class UserModel {
 
     private Integer userId;

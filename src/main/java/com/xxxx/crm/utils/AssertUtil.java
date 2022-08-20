@@ -23,6 +23,7 @@ public class AssertUtil {
      * @param msg
      * @return void
      */
+    // flag正确的话，就输出msg的信息
     public static void isTrue(Boolean flag, String msg) {
         if (flag) {
             throw new ParamsException(msg);

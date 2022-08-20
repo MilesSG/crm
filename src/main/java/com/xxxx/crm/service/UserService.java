@@ -80,15 +80,17 @@ public class UserService extends BaseService<User, Integer> {
         AssertUtil.isTrue(user == null, "待更新用户不存在!");
         checkPasswordParams(user, oldPwd, newPwd, repeatPwd);
         user.setUserPwd(Md5Util.encode(newPwd));
-        AssertUtil.isTrue(userMapper.updateByPrimaryKeySelective(user) != 1, "修改密码失败!");
+        AssertUtil.isTrue(userMapper.updateByPrimaryKeySelective(user) < 1, "修改密码失败!");
     }
 
     private void checkPasswordParams(User user, String oldPwd, String newPwd, String repeatPwd) {
-        AssertUtil.isTrue(StringUtils.isBlank(oldPwd), "原始密码不能为空!");
-        AssertUtil.isTrue(!user.getUserPwd().equals(Md5Util.encode(oldPwd)), "原始密码不正确!");
-        AssertUtil.isTrue(!StringUtils.isBlank(newPwd), "新密码不能为空!");
-        AssertUtil.isTrue(!newPwd.equals(oldPwd), "新密码不能与旧密码一致!");
-        AssertUtil.isTrue(StringUtils.isBlank(newPwd), "新密码不能为空!");
-        AssertUtil.isTrue(!newPwd.equals(repeatPwd), "确认密码与新密码不一致!");
+        AssertUtil.isTrue(StringUtils.isBlank(oldPwd), "原始密码不能为空！");
+        AssertUtil.isTrue(!user.getUserPwd().equals(Md5Util.encode(oldPwd)), "原始密码不正确！");
+        AssertUtil.isTrue(StringUtils.isBlank(newPwd), "新密码不能为空！");
+        AssertUtil.isTrue(oldPwd.equals(newPwd),"新密码不能与原始密码相同！");
+        AssertUtil.isTrue(StringUtils.isBlank(repeatPwd),"确认密码不能为空！");
+        AssertUtil.isTrue(!newPwd.equals(repeatPwd), "确认密码与新密码不一致！");
     }
+
+
 }

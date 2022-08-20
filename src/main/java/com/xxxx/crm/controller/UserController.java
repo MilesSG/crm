@@ -45,13 +45,12 @@ public class UserController extends BaseController {
         return resultInfo;
     }
 
-    @PostMapping("user/updatePwd")
+    @PostMapping("updatePwd")
     @ResponseBody
     public ResultInfo updateUserPassword(HttpServletRequest request, String oldPassword, String newPassword, String repeatPassword) {
         ResultInfo resultInfo = new ResultInfo();
-
         try {
-            int userId = LoginUserUtil.releaseUserIdFromCookie(request);
+            Integer userId = LoginUserUtil.releaseUserIdFromCookie(request);
             userService.updatePassword(userId, oldPassword, newPassword, repeatPassword);
         } catch (ParamsException p) {
             // 捕获自定义的异常

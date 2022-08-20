@@ -9,6 +9,8 @@ import com.xxxx.crm.utils.UserIDBase64;
 import com.xxxx.crm.vo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -19,6 +21,7 @@ public class UserService extends BaseService<User, Integer> {
     private UserMapper userMapper;
 
     /**
+     * 用户登录
      * 1. 参数判断，判断用户姓名、密码非空等，如果参数为空，则抛出异常给Controller层做相应的处理
      * 2. 调用Dao数据访问层，通过用户名查询用户记录，返回用户对象
      * 3. 判断用户对象是否为空，如果对象为空，则也抛出异常给Controller层做相应的处理
@@ -55,5 +58,24 @@ public class UserService extends BaseService<User, Integer> {
         userModel.setUserName(user.getUserName());
         userModel.setTrueName(user.getTrueName());
         return userModel;
+    }
+
+    /**
+     * 修改密码
+     * 1. 接收四个参数：用户ID、原始密码、新密码、确认密码
+     * 2. 通过用户ID查询用户记录，返回一个用户对象
+     * 3. 参数校验：
+     * 包括待更新的用户记录是否存在、
+     * 原始密码是否为空、
+     * 原始密码是否正确、
+     * 判断新密码是否为空、
+     * 新密码是否和确认密码一样、
+     * 不允许新密码与原始密码一致
+     * 4. 设置用户新密码，将新密码通过MD5算法进行加密
+     * 5. 执行更新操作，判断受影响的行数
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updatePassword() {
+
     }
 }

@@ -64,7 +64,11 @@ public class UserController extends BaseController {
             resultInfo.setMsg("修改密码失败!");
             e.printStackTrace();
         }
-
         return resultInfo;
+    }
+
+    @RequestMapping("toPasswordPage")
+    private String toPasswordPage() {
+        return "user/password";
     }
 }

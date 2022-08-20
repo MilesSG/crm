@@ -67,7 +67,7 @@ public class UserService extends BaseService<User, Integer> {
      * 3. 参数校验：
      * 包括待更新的用户记录是否存在、
      * 原始密码是否为空、
-     * 原始密码是否正确、
+     * 原始密码是否正确(查询的用户对象的新密码是否与原始密码一致，要保持不一致才行)、
      * 判断新密码是否为空、
      * 新密码是否和确认密码一样、
      * 不允许新密码与原始密码一致
@@ -75,7 +75,22 @@ public class UserService extends BaseService<User, Integer> {
      * 5. 执行更新操作，判断受影响的行数
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updatePassword() {
+    public void updatePassword(Integer userId, String oldPwd, String newPwd, String repeatPwd) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        AssertUtil.isTrue(user == null, "待更新用户不存在!");
+        checkPasswordParams(user, oldPwd, newPwd, repeatPwd);
+        user.setUserPwd(Md5Util.encode(newPwd));
+        AssertUtil.isTrue(userMapper.updateByPrimaryKeySelective(user) != 1, "更新密码不成功!");
+    }
+
+    private void checkPasswordParams(User user, String oldPwd, String newPwd, String repeatPwd) {
+        AssertUtil.isTrue(StringUtils.isBlank(oldPwd), "原始密码不能为空!");
+        AssertUtil.isTrue(!user.getUserPwd().equals(Md5Util.encode(oldPwd)), "原始密码不正确!");
+        AssertUtil.isTrue(!StringUtils.isBlank(newPwd), "新密码不能为空!");
+        AssertUtil.isTrue(!newPwd.equals(oldPwd), "新密码不能与旧密码一致!");
+        AssertUtil.isTrue(StringUtils.isBlank(newPwd), "新密码不能为空!");
+        AssertUtil.isTrue(!newPwd.equals(repeatPwd), "确认密码与新密码不一致!");
+
 
     }
 }

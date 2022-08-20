@@ -3,16 +3,16 @@ package com.xxxx.crm.model;
 // 用户model对象
 public class UserModel {
 
-    private Integer userId;
+    private String userIdStr; // 这个是加密后的userId
     private String userName;
     private String trueName;
 
-    public Integer getUserId() {
-        return userId;
+    public String getUserIdStr() {
+        return userIdStr;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserIdStr(String userIdStr) {
+        this.userIdStr = userIdStr;
     }
 
     public String getUserName() {

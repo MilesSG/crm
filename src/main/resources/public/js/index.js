@@ -51,11 +51,7 @@ layui.use(['form', 'jquery', 'jquery_cookie'], function () {
                 }
             }
         });
-
-
         return false;
-
-
     })
 
 

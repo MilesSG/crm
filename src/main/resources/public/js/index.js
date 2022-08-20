@@ -32,22 +32,26 @@ layui.use(['form', 'jquery', 'jquery_cookie'], function () {
                 userPwd: data.password
             },
             dataType: "json",
-            success: function (data) {
+            success: function (result) {
                 if (data.code == 200) {
                     layer.msg("用户登录成功", function () {
-                        var result = data.result;
-                        $.cookie("userIdStr", result.userIdStr);
-                        $.cookie("userName", result.userName);
-                        $.cookie("trueName", result.trueName);
-                        if ($("input[type='checkbox']").is(":checked")) {
-                            $.cookie("userIdStr", result.userIdStr, {expires: 7});
-                            $.cookie("userName", result.userName, {expires: 7});
-                            $.cookie("trueName", result.trueName, {expires: 7});
+                        // 判断用户是否选择记住密码（判断复选框是否被选中，如果选中，则设置cookie对象7天生效）
+                        if ($("#rememberMe").prop("checked")) {
+                            // 选中，则设置cookie对象7天生效
+                            // 将用户信息设置到cookie中
+                            $.cookie("userIdStr", result.result.userIdStr, {expires: 7});
+                            $.cookie("userName", result.result.userName, {expires: 7});
+                            $.cookie("trueName", result.result.trueName, {expires: 7});
+                        } else {
+                            // 将用户信息设置到cookie中
+                            $.cookie("userIdStr", result.result.userIdStr);
+                            $.cookie("userName", result.result.userName);
+                            $.cookie("trueName", result.result.trueName);
                         }
                         window.location.href = ctx + "/main";
                     })
                 } else {
-                    layer.msg(data.msg);
+                    layer.msg(result.msg, {icon: 5});
                 }
             }
         });

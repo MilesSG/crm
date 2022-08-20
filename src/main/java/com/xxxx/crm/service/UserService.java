@@ -76,6 +76,7 @@ public class UserService extends BaseService<User, Integer> {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void updatePassword(Integer userId, String oldPwd, String newPwd, String repeatPwd) {
+
         User user = userMapper.selectByPrimaryKey(userId);
         AssertUtil.isTrue(user == null, "待更新用户不存在!");
         checkPasswordParams(user, oldPwd, newPwd, repeatPwd);

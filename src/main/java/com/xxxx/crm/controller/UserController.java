@@ -49,6 +49,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public ResultInfo updateUserPassword(HttpServletRequest request, String oldPassword, String newPassword, String repeatPassword) {
         ResultInfo resultInfo = new ResultInfo();
+
         try {
             Integer userId = LoginUserUtil.releaseUserIdFromCookie(request);
             userService.updatePassword(userId, oldPassword, newPassword, repeatPassword);

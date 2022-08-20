@@ -8,16 +8,12 @@ layui.use(['element', 'layer', 'layuimini','jquery','jquery_cookie'], function (
     layuimini.initTab();
 
 
+    // 退出登录
     $(".login-out").click(function () {
         $.removeCookie("userIdStr",{domain:"localhost",path:"/crm"});
         $.removeCookie("userName",{domain:"localhost",path:"/crm"});
         $.removeCookie("trueName",{domain:"localhost",path:"/crm"});
         window.parent.location.href=ctx+"/index";
     })
-
-
-
-
-
 });
 

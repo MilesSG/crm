@@ -21,7 +21,6 @@ layui.use(['form', 'jquery', 'jquery_cookie'], function () {
             }, success: function (result) {
                 // 判断是否修改成功
                 if (result.code == 200) {
-
                     // 修改密码成功后，清空cookie数据，跳转到登录页面
                     layer.msg("用户密码修改成功，系统将在3秒钟后退出...", function () {
                         // 清空cookie
